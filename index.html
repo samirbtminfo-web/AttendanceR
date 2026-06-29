@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dream Lands - Employee Attendance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0d0d0f;
+    --bg-card: #16161a;
+    --gold: #c9a24b;
+    --gold-light: #e8c97a;
+    --text: #f1ede4;
+    --text-dim: #9a958a;
+    --green: #3fae63;
+    --red: #d4574a;
+    --border: rgba(201,162,75,0.18);
+  }
+
+  *{ box-sizing: border-box; margin:0; padding:0; }
+
+  body{
+    min-height:100vh;
+    background: radial-gradient(circle at top, #1a1a1f 0%, #0d0d0f 60%);
+    font-family: 'Hind Siliguri', sans-serif;
+    color: var(--text);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding: 24px;
+  }
+
+  .card{
+    width:100%;
+    max-width: 420px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 36px 30px 30px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    position:relative;
+    overflow:hidden;
+  }
+
+  .card::before{
+    content:"";
+    position:absolute;
+    top:0; left:0; right:0;
+    height:3px;
+    background: linear-gradient(90deg, transparent, var(--gold-light), transparent);
+  }
+
+  .brand{
+    text-align:center;
+    margin-bottom: 6px;
+  }
+
+  .brand .name{
+    font-family:'Playfair Display', serif;
+    font-size: 26px;
+    font-weight:700;
+    color: var(--gold-light);
+    letter-spacing: 0.5px;
+  }
+
+  .brand .tag{
+    font-size: 12px;
+    color: var(--text-dim);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  .divider{
+    width: 50px;
+    height: 1px;
+    background: var(--gold);
+    margin: 18px auto 22px;
+    opacity:0.5;
+  }
+
+  .clock{
+    text-align:center;
+    margin-bottom: 22px;
+  }
+
+  .clock .time{
+    font-size: 34px;
+    font-weight:600;
+    letter-spacing: 1px;
+    color: var(--text);
+  }
+
+  .clock .date{
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+
+  label{
+    display:block;
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+
+  input[type="text"]{
+    width:100%;
+    padding: 14px 16px;
+    background: #0d0d0f;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-size: 16px;
+    font-family: inherit;
+    outline:none;
+    transition: border-color 0.2s;
+  }
+
+  input[type="text"]:focus{
+    border-color: var(--gold);
+  }
+
+  input[type="text"]::placeholder{
+    color: #5c594f;
+  }
+
+  .btn-row{
+    display:flex;
+    gap: 12px;
+    margin-top: 18px;
+  }
+
+  button{
+    flex:1;
+    padding: 15px 0;
+    border:none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight:600;
+    font-family: inherit;
+    cursor:pointer;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+    letter-spacing: 0.3px;
+  }
+
+  button:active{
+    transform: scale(0.97);
+  }
+
+  button:disabled{
+    opacity:0.6;
+    cursor:not-allowed;
+    transform:none;
+  }
+
+  .btn-in{
+    background: linear-gradient(135deg, var(--gold-light), var(--gold));
+    color: #1a1408;
+  }
+
+  .btn-out{
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+
+  .btn-out:hover{
+    border-color: var(--gold);
+  }
+
+  .status{
+    margin-top: 18px;
+    padding: 13px 14px;
+    border-radius: 10px;
+    font-size: 14px;
+    text-align:center;
+    display:none;
+    line-height:1.5;
+  }
+
+  .status.show{
+    display:block;
+    animation: fadeIn 0.25s ease;
+  }
+
+  .status.success{
+    background: rgba(63,174,99,0.12);
+    border: 1px solid rgba(63,174,99,0.35);
+    color: #7fd99a;
+  }
+
+  .status.error{
+    background: rgba(212,87,74,0.12);
+    border: 1px solid rgba(212,87,74,0.35);
+    color: #ef9089;
+  }
+
+  .status.loading{
+    background: rgba(201,162,75,0.1);
+    border: 1px solid var(--border);
+    color: var(--gold-light);
+  }
+
+  @keyframes fadeIn{
+    from{ opacity:0; transform: translateY(-4px); }
+    to{ opacity:1; transform: translateY(0); }
+  }
+
+  .footer-note{
+    text-align:center;
+    font-size: 11px;
+    color: #5c594f;
+    margin-top: 22px;
+    letter-spacing: 0.4px;
+  }
+
+  .spinner{
+    display:inline-block;
+    width:14px;
+    height:14px;
+    border: 2px solid rgba(201,162,75,0.3);
+    border-top-color: var(--gold-light);
+    border-radius:50%;
+    animation: spin 0.7s linear infinite;
+    vertical-align: middle;
+    margin-right: 6px;
+  }
+
+  @keyframes spin{
+    to{ transform: rotate(360deg); }
+  }
+
+  @media (max-width:420px){
+    .card{ padding: 28px 22px 24px; }
+    .clock .time{ font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="brand">
+    <div class="name">Dream Lands</div>
+    <div class="tag">Employee Attendance</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="clock">
+    <div class="time" id="liveTime">--:--:--</div>
+    <div class="date" id="liveDate">-- --- ----</div>
+  </div>
+
+  <label for="empId">আপনার Employee ID লিখুন</label>
+  <input type="text" id="empId" placeholder="যেমনঃ DL-014" autocomplete="off">
+
+  <div class="btn-row">
+    <button class="btn-in" id="checkInBtn" onclick="submitAttendance('checkin')">Check In</button>
+    <button class="btn-out" id="checkOutBtn" onclick="submitAttendance('checkout')">Check Out</button>
+  </div>
+
+  <div class="status" id="statusBox"></div>
+
+  <div class="footer-note">Dream Lands Real Estate &copy; <span id="yearNow"></span></div>
+</div>
+
+<script>
+  // ====== CONFIG: এখানে আপনার Google Apps Script Web App URL দিন ======
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzM4J7pl3Xl4Q357vXspKbC1jzU-ZLU1_dq2ybsjB4qaKZPOqX7t_CqCIWFeYefrRM/exec";
+  // =======================================================================
+
+  document.getElementById('yearNow').textContent = new Date().getFullYear();
+
+  function updateClock(){
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute:'2-digit', second:'2-digit' });
+    const dateStr = now.toLocaleDateString('bn-BD', { day:'numeric', month:'long', year:'numeric' });
+    document.getElementById('liveTime').textContent = timeStr;
+    document.getElementById('liveDate').textContent = dateStr;
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
+
+  function setStatus(message, type){
+    const box = document.getElementById('statusBox');
+    box.className = 'status show ' + type;
+    box.innerHTML = message;
+  }
+
+  function clearStatus(){
+    const box = document.getElementById('statusBox');
+    box.className = 'status';
+    box.innerHTML = '';
+  }
+
+  function toggleButtons(disabled){
+    document.getElementById('checkInBtn').disabled = disabled;
+    document.getElementById('checkOutBtn').disabled = disabled;
+  }
+
+  async function submitAttendance(action){
+    const empId = document.getElementById('empId').value.trim();
+
+    if(!empId){
+      setStatus('আপনার Employee ID লিখুন।', 'error');
+      return;
+    }
+
+    if(SCRIPT_URL.includes('Server Error ! Kindly Wait')){
+      setStatus('⚠️  (Developer note)', 'error');
+      return;
+    }
+
+    toggleButtons(true);
+    setStatus('<span class="spinner"></span>অপেক্ষা করুন...', 'loading');
+
+    const actionLabel = action === 'checkin' ? 'Check-In' : 'Check-Out';
+
+    try{
+      const url = `${SCRIPT_URL}?action=${action}&employeeId=${encodeURIComponent(empId)}`;
+      const res = await fetch(url, { method: 'GET' });
+      const data = await res.json();
+
+      if(data.success){
+        setStatus('✅ ' + data.message, 'success');
+        document.getElementById('empId').value = '';
+      } else {
+        setStatus('❌ ' + data.message, 'error');
+      }
+    } catch(err){
+      setStatus('❌ সার্ভারের সাথে সংযোগ করা যায়নি। ইন্টারনেট চেক করুন।', 'error');
+    } finally {
+      toggleButtons(false);
+    }
+  }
+
+  // Enter key দিয়ে Check-In trigger করার সুবিধা
+  document.getElementById('empId').addEventListener('keydown', function(e){
+    if(e.key === 'Enter'){
+      submitAttendance('checkin');
+    }
+  });
+</script>
+
+</body>
+</html>
